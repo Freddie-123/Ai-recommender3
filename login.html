@@ -1,20 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login & Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .box {
+      background: #ffffff;
+      padding: 30px;
+      width: 340px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .toggle {
+      background: #6c757d;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div class="login-container">
-    <h1>Welcome!</h1>
-    <form id="login-form">
-      <input type="text" id="username" placeholder="Enter Username" required>
-      <input type="password" id="password" placeholder="Enter Password" required>
-      <button type="submit">Login</button>
-    </form>
+  <div class="box">
+    <h2 id="title">Sign Up</h2>
+
+    <label>Username</label>
+    <input type="text" id="username" />
+
+    <label>Password</label>
+    <input type="password" id="password" />
+
+    <button onclick="signup()" id="mainBtn">Sign Up</button>
+    <button class="toggle" onclick="toggleMode()">Switch to Login</button>
+
+    <div class="message" id="message"></div>
   </div>
-  <script src="js/login.js"></script>
+
+  <script>
+    let isLogin = false;
+
+    function signup() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      if (!username || !password) {
+        message.style.color = "red";
+        message.textContent = "Please fill in all fields";
+        return;
+      }
+
+      if (isLogin) {
+        // LOGIN
+        const savedUser = localStorage.getItem("username");
+        const savedPass = localStorage.getItem("password");
+
+        if (username === savedUser && password === savedPass) {
+          message.style.color = "green";
+          message.textContent = "Login successful!";
+          window.location.href = "index.html"; // same destination page
+          // window.location.href = "dashboard.html";
+        } else {
+          message.style.color = "red";
+          message.textContent = "Invalid username or password";
+        }
+      } else {
+        // SIGN UP
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+
+        message.style.color = "green";
+        message.textContent = "Account created! Redirecting...";
+        window.location.href = "index.html";
+        // toggleMode();
+      }
+    }
+
+    function toggleMode() {
+      isLogin = !isLogin;
+      document.getElementById("title").textContent = isLogin ? "Login" : "Sign Up";
+      document.getElementById("mainBtn").textContent = isLogin ? "Login" : "Sign Up";
+      document.getElementById("message").textContent = "";
+    }
+  </script>
 </body>
 </html>
+
